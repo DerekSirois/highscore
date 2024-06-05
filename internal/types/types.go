@@ -2,6 +2,7 @@ package types
 
 import "time"
 
+// Users
 type User struct {
 	Id        int
 	Username  string
@@ -11,12 +12,25 @@ type User struct {
 	CreatedAt time.Time
 }
 
+type UserLogin struct {
+	Email    string
+	Password string
+}
+
+type UserRegister struct {
+	Username string
+	Email    string
+	Password string
+}
+
+// Games
 type Game struct {
 	Id        int
 	Name      string
 	CreatedAt time.Time
 }
 
+// Scores
 type Score struct {
 	Id         int
 	PlayerId   int
@@ -27,8 +41,9 @@ type Score struct {
 	ApprovedAt time.Time
 }
 
+// Interfaces
 type UserStore interface {
 	GetById(id int) (User, error)
 	GetByEmail(email string) (User, error)
-	Insert(user User) (int64, error)
+	Insert(user UserRegister) error
 }

@@ -2,6 +2,7 @@ package server
 
 import (
 	"database/sql"
+	"highscore/internal/services/user"
 	"log"
 	"net/http"
 
@@ -23,9 +24,9 @@ func New(addr string, db *sql.DB) *Server {
 func (s *Server) Run() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Welcome the the highscore leaderboard"))
-	}) // Temp
+	userStore := user.NewStore(s.Db)
+	userHandler := user.NewHandler(userStore)
+	userHandler.RegisterRoutes(router)
 
 	log.Printf("Serving on %s\n", s.Addr)
 	log.Fatal(http.ListenAndServe(s.Addr, router))
