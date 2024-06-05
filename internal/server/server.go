@@ -13,10 +13,10 @@ type Server struct {
 	Db   *sql.DB
 }
 
-func New(addr string) *Server {
+func New(addr string, db *sql.DB) *Server {
 	return &Server{
 		Addr: addr,
-		Db:   nil, // Temp
+		Db:   db,
 	}
 }
 

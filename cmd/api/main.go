@@ -1,8 +1,21 @@
 package main
 
-import "highscore/internal/server"
+import (
+	"highscore/internal/db"
+	"highscore/internal/server"
+	"log"
+
+	"github.com/joho/godotenv"
+)
 
 func main() {
-	s := server.New(":8080")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db := db.InitDb()
+
+	s := server.New(":8080", db)
 	s.Run()
 }
