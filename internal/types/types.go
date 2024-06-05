@@ -26,3 +26,9 @@ type Score struct {
 	CreatedAt  time.Time
 	ApprovedAt time.Time
 }
+
+type UserStore interface {
+	GetById(id int) (User, error)
+	GetByEmail(email string) (User, error)
+	Insert(user User) (int64, error)
+}
