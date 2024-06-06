@@ -22,7 +22,7 @@ func (s *Store) GetById(id int) (types.User, error) {
 
 	row := s.db.QueryRow(`SELECT u.id, u.username, u.email, u.password, u.createdat, r.name as role 
 						  FROM users u JOIN role r on u.roleid = r.id 
-					      WHERE id = $1`, id)
+					      WHERE u.id = $1`, id)
 	if err := row.Scan(&user.Id, &user.Username, &user.Email, &user.Password, &user.CreatedAt, &user.Role); err != nil {
 		if err == sql.ErrNoRows {
 			return user, fmt.Errorf("user not found")

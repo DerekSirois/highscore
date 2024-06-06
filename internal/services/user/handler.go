@@ -46,9 +46,10 @@ func (h *Handler) HandleLogin(w http.ResponseWriter, r *http.Request) error {
 		return fmt.Errorf("wrong username/password")
 	}
 
-	// START TEMP
-	token := "asdf"
-	// END TEMP
+	token, err := auth.CreateJWT(userDb.Id)
+	if err != nil {
+		return err
+	}
 
 	res := utils.JsonResponse{
 		Message: "You logged in successfully",
