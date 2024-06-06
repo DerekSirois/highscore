@@ -3,6 +3,7 @@ package user
 import (
 	"encoding/json"
 	"fmt"
+	"highscore/internal/auth"
 	"highscore/internal/types"
 	"highscore/internal/utils"
 	"log"
@@ -41,10 +42,11 @@ func (h *Handler) HandleLogin(w http.ResponseWriter, r *http.Request) error {
 
 	log.Println(user.Password, userDb.Password)
 
-	// START TEMP
-	if user.Password != userDb.Password {
+	if !auth.CheckPasswordHash(user.Password, userDb.Password) {
 		return fmt.Errorf("wrong username/password")
 	}
+
+	// START TEMP
 	token := "asdf"
 	// END TEMP
 
@@ -64,7 +66,10 @@ func (h *Handler) HandleRegister(w http.ResponseWriter, r *http.Request) error {
 		return fmt.Errorf("failed to parse the data")
 	}
 
-	// TODO: Hash the password
+	user.Password, err = auth.HashPassword(user.Password)
+	if err != nil {
+		return fmt.Errorf("failed to hash the password")
+	}
 
 	err = h.store.Insert(user)
 	if err != nil {
