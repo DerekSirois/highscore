@@ -47,3 +47,9 @@ type UserStore interface {
 	GetByEmail(email string) (User, error)
 	Insert(user UserRegister) error
 }
+
+type GameStore interface {
+	GetAll() ([]Game, error)
+	GetById(id int) (Game, error)
+	Insert(game Game) error
+}
