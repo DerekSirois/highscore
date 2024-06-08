@@ -36,7 +36,9 @@ func WriteJson(w http.ResponseWriter, statusCode int, data JsonResponse) {
 func GetTokenFromRequest(r *http.Request) string {
 	tokenAuth := r.Header.Get("Authorization")
 
-	log.Println(tokenAuth[7:])
+	if tokenAuth == "" {
+		return ""
+	}
 
 	return tokenAuth[7:] // remove bearer
 }

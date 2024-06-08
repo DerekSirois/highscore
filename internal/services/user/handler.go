@@ -6,7 +6,6 @@ import (
 	"highscore/internal/auth"
 	"highscore/internal/types"
 	"highscore/internal/utils"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -39,8 +38,6 @@ func (h *Handler) HandleLogin(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-
-	log.Println(user.Password, userDb.Password)
 
 	if !auth.CheckPasswordHash(user.Password, userDb.Password) {
 		return fmt.Errorf("wrong username/password")

@@ -16,3 +16,6 @@ migration-up:
 
 test:
 	@go test -v ./internal/...
+
+run:
+	@go run ./cmd/api/main.go
