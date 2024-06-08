@@ -39,9 +39,9 @@ type Game struct {
 // Scores
 type Score struct {
 	Id         int
-	PlayerId   int
-	GameId     int
-	ApproverId int
+	Player     string
+	Game       string
+	Approver   string
 	Score      int
 	CreatedAt  time.Time
 	ApprovedAt time.Time
