@@ -2,6 +2,12 @@ package types
 
 import "time"
 
+const (
+	UserRole      string = "User"
+	ModeratorRole string = "Moderator"
+	AdminRole     string = "Admin"
+)
+
 // Users
 type User struct {
 	Id        int

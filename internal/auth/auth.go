@@ -21,7 +21,7 @@ const UserKey contextKey = "userID"
 
 var JwtSecret = os.Getenv("JWTSECRET")
 
-func WithJWTAuth(handlerFunc http.HandlerFunc, store types.UserStore) http.HandlerFunc {
+func WithJWTAuth(handlerFunc http.HandlerFunc, store types.UserStore, expectedRole string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tokenString := utils.GetTokenFromRequest(r)
 
@@ -51,6 +51,13 @@ func WithJWTAuth(handlerFunc http.HandlerFunc, store types.UserStore) http.Handl
 		u, err := store.GetById(userID)
 		if err != nil {
 			log.Printf("failed to get user by id: %v", err)
+			permissionDenied(w)
+			return
+		}
+
+		// we check for the role and if the expected role is user, anybody can access it
+		if u.Role != expectedRole && expectedRole != types.UserRole {
+			log.Printf("you are not a %s", expectedRole)
 			permissionDenied(w)
 			return
 		}
