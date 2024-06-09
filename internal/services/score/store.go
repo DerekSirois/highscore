@@ -22,7 +22,8 @@ func (s *Store) GetAllApprovedScoresByGame(gameId int) ([]types.Score, error) {
 							JOIN game g ON s.gameid = g.id
 							JOIN users u1 ON s.playerid = u1.id
 							JOIN users u2 ON s.approverid = u2.id
-							WHERE s.approvedat IS NOT NULL`)
+							WHERE s.approvedat IS NOT NULL
+							ORDER BY s.score`)
 	if err != nil {
 		return nil, fmt.Errorf("error while getting the scores: %v", err)
 	}
@@ -45,7 +46,8 @@ func (s *Store) GetAllScoresPendingApproval() ([]types.Score, error) {
 							FROM score s
 							JOIN game g ON s.gameid = g.id
 							JOIN users u ON s.playerid = u.id
-							WHERE s.approvedat IS NULL`)
+							WHERE s.approvedat IS NULL
+							ORDER BY g.name`)
 	if err != nil {
 		return nil, fmt.Errorf("error while getting the scores: %v", err)
 	}
@@ -70,8 +72,8 @@ func (s *Store) Insert(playerId int, gameId int, score int) error {
 	return nil
 }
 
-func (s *Store) Approve(approverId int) error {
-	_, err := s.db.Exec("UPDATE score SET approverId = $1, approvedAt = $2", approverId, time.Now())
+func (s *Store) Approve(approverId int, scoreId int) error {
+	_, err := s.db.Exec("UPDATE score SET approverId = $1, approvedAt = $2 WHERE id = $3", approverId, time.Now(), scoreId)
 	if err != nil {
 		return fmt.Errorf("error while updating the score: %v", err)
 	}

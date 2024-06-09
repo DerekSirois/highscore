@@ -3,6 +3,7 @@ package server
 import (
 	"database/sql"
 	"highscore/internal/services/game"
+	"highscore/internal/services/score"
 	"highscore/internal/services/user"
 	"log"
 	"net/http"
@@ -32,6 +33,10 @@ func (s *Server) Run() {
 	gameStore := game.NewStore(s.Db)
 	gameHandler := game.NewHandler(gameStore, userStore)
 	gameHandler.RegisterRoutes(router)
+
+	scoreStore := score.NewStore(s.Db)
+	scoreHandler := score.NewHandler(scoreStore, userStore)
+	scoreHandler.RegisterRoutes(router)
 
 	log.Printf("Serving on %s\n", s.Addr)
 	log.Fatal(http.ListenAndServe(s.Addr, router))
